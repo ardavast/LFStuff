@@ -37,7 +37,7 @@ http://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.10.tar.xz
 http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.bz2
 http://ftp.gnu.org/gnu/make/make-3.82.tar.bz2
 http://download.savannah.gnu.org/releases/man-db/man-db-2.6.5.tar.xz
-http://www.kernel.org/pub/linux/docs/man-pages/man-pages-3.53.tar.xz
+https://www.kernel.org/pub/linux/docs/man-pages/man-pages-3.53.tar.bz2
 http://www.multiprecision.org/mpc/download/mpc-1.0.1.tar.gz
 http://www.mpfr.org/mpfr-3.1.2/mpfr-3.1.2.tar.xz
 http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz
@@ -48,7 +48,7 @@ http://sourceforge.net/projects/procps-ng/files/Production/procps-ng-3.3.8.tar.x
 http://prdownloads.sourceforge.net/psmisc/psmisc-22.20.tar.gz
 http://ftp.gnu.org/gnu/readline/readline-6.2.tar.gz
 http://ftp.gnu.org/gnu/sed/sed-4.2.2.tar.bz2
-http://pkg-shadow.alioth.debian.org/releases/shadow-4.1.5.1.tar.bz2
+http://pkgs.fedoraproject.org/repo/pkgs/shadow-utils/shadow-4.1.5.1.tar.bz2/a00449aa439c69287b6d472191dc2247/shadow-4.1.5.1.tar.bz2
 http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.tar.gz
 http://download.savannah.gnu.org/releases/sysvinit/sysvinit-2.88dsf.tar.bz2
 http://ftp.gnu.org/gnu/tar/tar-1.26.tar.bz2
