@@ -563,7 +563,7 @@
 #cd ..
 #rm -rf bison-3.0
 
-##6.32
+## 6.32
 #cd /sources
 #tar Jxf grep-2.14.tar.xz
 #cd grep-2.14
@@ -574,22 +574,467 @@
 #cd ..
 #rm -rf grep-2.14
 
-#6.33
+# 6.33
+#cd /sources
+#tar zxf readline-6.2.tar.gz
+#cd readline-6.2
+#sed -i '/MV.*old/d' Makefile.in
+#sed -i '/{OLDSUFF}/c:' support/shlib-install
+#patch -Np1 -i ../readline-6.2-fixes-1.patch
+#./configure --prefix=/usr --libdir=/lib
+#make SHLIB_LIBS=-lncurses
+#make install
+#mv -v /lib/lib{readline,history}.a /usr/lib
+#rm -v /lib/lib{readline,history}.so
+#ln -sfv ../../lib/libreadline.so.6 /usr/lib/libreadline.so
+#ln -sfv ../../lib/libhistory.so.6 /usr/lib/libhistory.so
+#mkdir   -v       /usr/share/doc/readline-6.2
+#install -v -m644 doc/*.{ps,pdf,html,dvi} \
+#                 /usr/share/doc/readline-6.2
+#cd ..
+#rm -rf readline-6.2
+
+## 6.34
+#cd /sources
+#tar zxf bash-4.2.tar.gz
+#cd bash-4.2
+#patch -Np1 -i ../bash-4.2-fixes-12.patch
+#./configure --prefix=/usr                     \
+#            --bindir=/bin                     \
+#            --htmldir=/usr/share/doc/bash-4.2 \
+#            --without-bash-malloc             \
+#            --with-installed-readline
+#make
+#chown -Rv nobody .
+#su nobody -s /bin/bash -c "PATH=$PATH make tests"
+#make install
+#cd ..
+#rm -rf bash-4.2
+
+## 6.35
+#cd /sources
+#tar jxf bc-1.06.95.tar.bz2
+#cd bc-1.06.95
+#./configure --prefix=/usr --with-readline
+#make
+#echo "quit" | ./bc/bc -l Test/checklib.b
+#make install
+#cd ..
+#rm -rf bc-1.06.95
+#
+## 6.36
+#cd /sources
+#tar zxf libtool-2.4.2.tar.gz
+#cd libtool-2.4.2
+#./configure --prefix=/usr
+#make
+#make check
+#make install
+#cd ..
+#rm -rf libtool-2.4.2
+#
+## 6.37
+#cd /sources
+#tar zxf gdbm-1.10.tar.gz
+#cd gdbm-1.10
+#./configure --prefix=/usr --enable-libgdbm-compat
+#make
+#make check
+#make install
+#cd ..
+#rm -rf gdbm-1.10
+
+## 6.38
+#cd /sources
+#tar zxf inetutils-1.9.1.tar.gz
+#cd inetutils-1.9.1
+#sed -i -e '/gets is a/d' lib/stdio.in.h
+#./configure --prefix=/usr  \
+#    --libexecdir=/usr/sbin \
+#    --localstatedir=/var   \
+#    --disable-ifconfig     \
+#    --disable-logger       \
+#    --disable-syslogd      \
+#    --disable-whois        \
+#    --disable-servers
+#make
+#make check
+#make install
+#mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
+#cd ..
+#rm -rf inetutils-1.9.1
+#
+## 6.39
+#cd /sources
+#tar jxf perl-5.18.1.tar.bz2
+#cd perl-5.18.1
+#echo "127.0.0.1 localhost $(hostname)" > /etc/hosts
+#sed -i -e "s|BUILD_ZLIB\s*= True|BUILD_ZLIB = False|"           \
+#       -e "s|INCLUDE\s*= ./zlib-src|INCLUDE    = /usr/include|" \
+#       -e "s|LIB\s*= ./zlib-src|LIB        = /usr/lib|"         \
+#    cpan/Compress-Raw-Zlib/config.in
+#sh Configure -des -Dprefix=/usr                 \
+#                  -Dvendorprefix=/usr           \
+#                  -Dman1dir=/usr/share/man/man1 \
+#                  -Dman3dir=/usr/share/man/man3 \
+#                  -Dpager="/usr/bin/less -isR"  \
+#                  -Duseshrplib
+#make
+#make -k test
+#make install
+#cd ..
+#rm -rf perl-5.18.1
+#
+## 6.40
+#cd /sources
+#tar Jxf autoconf-2.69.tar.xz
+#cd autoconf-2.69
+#./configure --prefix=/usr
+#make
+#make check
+#make install
+#cd ..
+#rm -rf autoconf-2.69
+#
+## 6.41
+#cd /sources
+#tar Jxf automake-1.14.tar.xz
+#cd automake-1.14
+#patch -Np1 -i ../automake-1.14-test-1.patch
+#./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.14
+#make
+#make check
+#make install
+#cd ..
+#rm -rf automake-1.14
+
+## 6.42
+#cd /sources
+#tar Jxf diffutils-3.3.tar.xz
+#cd diffutils-3.3
+#./configure --prefix=/usr
+#make
+#make check
+#make install
+#cd ..
+#rm -rf diffutils-3.3
+#
+## 6.43
+#cd /sources
+#tar Jxf gawk-4.1.0.tar.xz
+#cd gawk-4.1.0
+#./configure --prefix=/usr --libexecdir=/usr/lib
+#make
+#make check
+#make install
+#mkdir -v /usr/share/doc/gawk-4.1.0
+#cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-4.1.0
+#cd ..
+#rm -rf gawk-4.1.0
+#
+## 6.44
+#cd /sources
+#tar zxf findutils-4.4.2.tar.gz
+#cd findutils-4.4.2
+#./configure --prefix=/usr                   \
+#            --libexecdir=/usr/lib/findutils \
+#            --localstatedir=/var/lib/locate
+#make
+#make check
+#make install
+#mv -v /usr/bin/find /bin
+#sed -i 's/find:=${BINDIR}/find:=\/bin/' /usr/bin/updatedb
+#cd ..
+#rm -rf findutils-4.4.2
+#
+## 6.45
+#cd /sources
+#tar zxf gettext-0.18.3.tar.gz
+#cd gettext-0.18.3
+#./configure --prefix=/usr \
+#            --docdir=/usr/share/doc/gettext-0.18.3
+#make
+#make check
+#make install
+#mv -v /usr/bin/find /bin
+#cd ..
+#rm -rf gettext-0.18.3
+#
+## 6.46
+#cd /sources
+#tar zxf groff-1.22.2.tar.gz
+#cd groff-1.22.2
+#PAGE=<paper_size> ./configure --prefix=/usr
+#make
+#mkdir -p /usr/share/doc/groff-1.22/pdf
+#make install
+#ln -sv eqn /usr/bin/geqn
+#ln -sv tbl /usr/bin/gtbl
+#cd ..
+#rm -rf groff-1.22.2
+#
+## 6.47
+#cd /sources
+#tar Jxf xz-5.0.5.tar.xz
+#cd xz-5.0.5
+#./configure --prefix=/usr --libdir=/lib --docdir=/usr/share/doc/xz-5.0.5
+#make
+#make check
+#make pkgconfigdir=/usr/lib/pkgconfig install
+#cd ..
+#rm -rf xz-5.0.5
+#
+## 6.48
+#cd /sources
+#tar Jxf grub-2.00.tar.xz
+#cd grub-2.00
+#sed -i -e '/gets is a/d' grub-core/gnulib/stdio.in.h
+#./configure --prefix=/usr          \
+#            --sysconfdir=/etc      \
+#            --disable-grub-emu-usb \
+#            --disable-efiemu       \
+#            --disable-werror
+#make
+#make install
+#cd ..
+#rm -rf grub-2.00
+#
+## 6.49
+#cd /sources
+#tar zxf less-458.tar.gz
+#cd less-458
+#./configure --prefix=/usr --sysconfdir=/etc
+#make
+#make install
+#cd ..
+#rm -rf less-458
+#
+## 6.50
+#cd /sources
+#tar Jxf gzip-1.6.tar.xz
+#cd gzip-1.6
+#./configure --prefix=/usr --bindir=/bin
+#make
+#make check
+#make install
+#mv -v /bin/{gzexe,uncompress,zcmp,zdiff,zegrep} /usr/bin
+#mv -v /bin/{zfgrep,zforce,zgrep,zless,zmore,znew} /usr/bin
+#cd ..
+#rm -rf gzip-1.6
+#
+## 6.51
+#cd /sources
+#tar Jxf iproute2-3.10.0.tar.xz
+#cd iproute2-3.10.0
+#sed -i '/^TARGETS/s@arpd@@g' misc/Makefile
+#sed -i /ARPD/d Makefile
+#sed -i 's/arpd.8//' man/man8/Makefile
+#make DESTDIR=
+#make DESTDIR=              \
+#     MANDIR=/usr/share/man \
+#     DOCDIR=/usr/share/doc/iproute2-3.10.0 install
+#cd ..
+#rm -rf iproute2-3.10.0
+#
+## 6.52
+#cd /sources
+#tar zxf kbd-1.15.5.tar.gz
+#cd kbd-1.15.5
+#patch -Np1 -i ../kbd-1.15.5-backspace-1.patch
+#sed -i -e '326 s/if/while/' src/loadkeys.analyze.l
+#sed -i 's/\(RESIZECONS_PROGS=\)yes/\1no/g' configure
+#sed -i 's/resizecons.8 //' man/man8/Makefile.in
+#./configure --prefix=/usr --disable-vlock
+#make
+#make install
+#mkdir -v       /usr/share/doc/kbd-1.15.5
+#cp -R -v doc/* /usr/share/doc/kbd-1.15.5
+#cd ..
+#rm -rf kbd-1.15.5
+#
+## 6.53
+#cd /sources
+#tar Jxf kmod-14.tar.xz
+#cd kmod-14
+#./configure --prefix=/usr       \
+#            --bindir=/bin       \
+#            --libdir=/lib       \
+#            --sysconfdir=/etc   \
+#            --disable-manpages  \
+#            --with-xz           \
+#            --with-zlib
+#make
+#make check
+#make pkgconfigdir=/usr/lib/pkgconfig install
+#
+#for target in depmod insmod modinfo modprobe rmmod; do
+#  ln -sv ../bin/kmod /sbin/$target
+#done
+#
+#ln -sv kmod /bin/lsmod
+#cd ..
+#rm -rf kmod-14
+#
+## 6.54
+#cd /sources
+#tar zxf libpipeline-1.2.4.tar.gz
+#cd libpipeline-1.2.4
+#PKG_CONFIG_PATH=/tools/lib/pkgconfig ./configure --prefix=/usr
+#make
+#make check
+#make install
+#cd ..
+#rm -rf libpipeline-1.2.4
+#
+## 6.55
+#cd /sources
+#tar jxf make-3.82.tar.bz2
+#cd make-3.82
+#patch -Np1 -i ../make-3.82-upstream_fixes-3.patch
+#./configure --prefix=/usr
+#make
+#make check
+#make install
+#cd ..
+#rm -rf make-3.82
+#
+## 6.56
+#cd /sources
+#tar Jxf man-db-2.6.5.tar.xz
+#cd man-db-2.6.5
+#./configure --prefix=/usr                        \
+#            --libexecdir=/usr/lib                \
+#            --docdir=/usr/share/doc/man-db-2.6.5 \
+#            --sysconfdir=/etc                    \
+#            --disable-setuid                     \
+#            --with-browser=/usr/bin/lynx         \
+#            --with-vgrind=/usr/bin/vgrind        \
+#            --with-grap=/usr/bin/grap
+#make
+#make check
+#make install
+#cd ..
+#rm -rf man-db-2.6.5
+#
+## 6.57
+#cd /sources
+#tar Jxf patch-2.7.1.tar.xz
+#cd patch-2.7.1
+#./configure --prefix=/usr --bindir=/bin
+#make
+#make check
+#make install
+#cd ..
+#rm -rf patch-2.7.1
+#
+## 6.58
+#cd /sources
+#tar zxf sysklogd-1.5.tar.gz
+#cd sysklogd-1.5
+#make
+#make BINDIR=/sbin install
+#
+#cat > /etc/syslog.conf << "EOF"
+## Begin /etc/syslog.conf
+#
+#auth,authpriv.* -/var/log/auth.log
+#*.*;auth,authpriv.none -/var/log/sys.log
+#daemon.* -/var/log/daemon.log
+#kern.* -/var/log/kern.log
+#mail.* -/var/log/mail.log
+#user.* -/var/log/user.log
+#*.emerg *
+#
+## End /etc/syslog.conf
+#EOF
+#
+#cd ..
+#rm -rf sysklogd-1.5
+#
+## 6.59
+#cd /sources
+#tar jxf sysvinit-2.88dsf.tar.bz2
+#cd sysvinit-2.88dsf
+#sed -i 's@Sending processes@& configured via /etc/inittab@g' src/init.c
+#sed -i -e '/utmpdump/d' \
+#       -e '/mountpoint/d' src/Makefile
+#make -C src
+#make -C src install
+#cd ..
+#rm -rf sysvinit-2.88dsf
+#
+## 6.60
+#cd /sources
+#tar jxf tar-1.26.tar.bz2
+#cd tar-1.26
+#patch -Np1 -i ../tar-1.26-manpage-1.patch
+#sed -i -e '/gets is a/d' gnu/stdio.in.h
+#FORCE_UNSAFE_CONFIGURE=1  \
+#./configure --prefix=/usr \
+#            --bindir=/bin \
+#            --libexecdir=/usr/sbin
+#make
+#make check
+#make install
+#make -C doc install-html docdir=/usr/share/doc/tar-1.26
+#perl tarman > /usr/share/man/man1/tar.1
+#cd ..
+#rm -rf tar-1.26
+#
+## 6.61
+#cd /sources
+#tar Jxf texinfo-5.1.tar.xz
+#cd texinfo-5.1
+#patch -Np1 -i ../texinfo-5.1-test-1.patch
+#./configure --prefix=/usr
+#make
+#make check
+#make install
+#make TEXMF=/usr/share/texmf install-tex
+#cd ..
+#rm -rf texinfo-5.1
+#
+## 6.62
+#cd /sources
+#tar Jxf systemd-206.tar.xz
+#cd systemd-206
+#tar -xvf ../udev-lfs-206-1.tar.bz2
+#make -f udev-lfs-206-1/Makefile.lfs
+#make -f udev-lfs-206-1/Makefile.lfs install
+#build/udevadm hwdb --update
+#bash udev-lfs-206-1/init-net-rules.sh
+#cd ..
+#rm -rf systemd-206
+
+# 6.63
 cd /sources
-tar zxf readline-6.2.tar.gz
-cd readline-6.2
-sed -i '/MV.*old/d' Makefile.in
-sed -i '/{OLDSUFF}/c:' support/shlib-install
-patch -Np1 -i ../readline-6.2-fixes-1.patch
-./configure --prefix=/usr --libdir=/lib
-make SHLIB_LIBS=-lncurses
+tar jxf vim-7.4.tar.bz2
+cd vim74
+echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
+./configure --prefix=/usr --enable-multibyte
+make
+make test
 make install
-mv -v /lib/lib{readline,history}.a /usr/lib
-rm -v /lib/lib{readline,history}.so
-ln -sfv ../../lib/libreadline.so.6 /usr/lib/libreadline.so
-ln -sfv ../../lib/libhistory.so.6 /usr/lib/libhistory.so
-mkdir   -v       /usr/share/doc/readline-6.2
-install -v -m644 doc/*.{ps,pdf,html,dvi} \
-                 /usr/share/doc/readline-6.2
+
+ln -sv vim /usr/bin/vi
+for L in  /usr/share/man/{,*/}man1/vim.1; do
+    ln -sv vim.1 $(dirname $L)/vi.1
+done
+
+ln -sv ../vim/vim74/doc /usr/share/doc/vim-7.4
+
+cat > /etc/vimrc << "EOF"
+" Begin /etc/vimrc
+
+set nocompatible
+set backspace=2
+syntax on
+if (&term == "iterm") || (&term == "putty")
+  set background=dark
+endif
+
+" End /etc/vimrc
+EOF
+
 cd ..
-rm -rf readline-6.2
+rm -rf vim74
