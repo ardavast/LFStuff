@@ -3,7 +3,6 @@
 import os
 import platform
 import subprocess
-import subprocess as sp
 import tempfile
 
 from contextlib import contextmanager
@@ -1115,66 +1114,244 @@ os.chdir('/sources')
 #    shch('mv -v /usr/bin/find /bin')
 #    shch("sed -i 's/find:=${BINDIR}/find:=\/bin/' /usr/bin/updatedb")
 
-# 6.43. Flex-2.5.37
-with pkg('flex-2.5.37'):
-    shch('patch -Np1 -i ../flex-2.5.37-bison-2.6.1-1.patch')
-    shch('./configure                               \
-              --prefix=/usr                         \
-              --docdir=/usr/share/doc/flex-2.5.37')
-    shch('make')
-    shch('make check')
-    shch('make install')
-    shch('ln -sv libfl.a /usr/lib/libl.a')
-    shch('''cat > /usr/bin/lex << "EOF"
-#!/bin/sh
-# Begin /usr/bin/lex
-    
-exec /usr/bin/flex -l "$@"
-    
-# End /usr/bin/lex
-EOF
-''')
-    shch('chmod -v 755 /usr/bin/lex')
+## 6.43. Flex-2.5.37
+#with pkg('flex-2.5.37'):
+#    shch('patch -Np1 -i ../flex-2.5.37-bison-2.6.1-1.patch')
+#    shch('./configure                               \
+#              --prefix=/usr                         \
+#              --docdir=/usr/share/doc/flex-2.5.37')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
+#    shch('ln -sv libfl.a /usr/lib/libl.a')
+#    with open('/usr/bin/lex', 'w') as fp:
+#        fp.write('#!/bin/sh\n'
+#                 '# Begin /usr/bin/lex\n'
+#                 '\n'
+#                 'exec /usr/bin/flex -l "$@"\n'
+#                 '\n'
+#                 '# End /usr/bin/lex\n')
+#    shch('chmod -v 755 /usr/bin/lex')
 
-
-# 6.44. Gettext-0.18.2
+## 6.44. Gettext-0.18.2
 #with pkg('gettext-0.18.2'):
+#    shch('./configure                                  \
+#              --prefix=/usr                            \
+#              --docdir=/usr/share/doc/gettext-0.18.2')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
 
-# 6.46. Groff-1.22.2
+## 6.45. Groff-1.22.2
 #with pkg('groff-1.22.2'):
+#    paper_size = 'A4' # FIXME
+#    shch('PAGE={0}            \
+#          ./configure         \
+#              --prefix=/usr'.format(paper_size))
+#    shch('make')
+#    shch('mkdir -p /usr/share/doc/groff-1.22/pdf')
+#    shch('make install')
+#    shch('ln -sv eqn /usr/bin/geqn')
+#    shch('ln -sv tbl /usr/bin/gtbl')
 
-# 6.47. Xz-5.0.4
+## 6.46. Xz-5.0.4
 #with pkg('xz-5.0.4'):
+#    shch('./configure                            \
+#              --prefix=/usr                      \
+#              --libdir=/lib                      \
+#              --docdir=/usr/share/doc/xz-5.0.4')
+#    shch('make')
+#    shch('make check')
+#    shch('make pkgconfigdir=/usr/lib/pkgconfig install')
 
-# 6.48. GRUB-2.00
-#with pkg('gRUB-2.00'):
-# 6.49. Less-451
+## 6.47. GRUB-2.00
+#with pkg('GRUB-2.00'):
+#    shch("sed -i -e '/gets is a/d' grub-core/gnulib/stdio.in.h")
+#    shch('./configure                  \
+#                --prefix=/usr          \
+#                --sysconfdir=/etc      \
+#                --disable-grub-emu-usb \
+#                --disable-efiemu       \
+#                --disable-werror')
+#    shch('make')
+#    shch('make install')
+
+## 6.48. Less-451
 #with pkg('less-451'):
-# 6.50. Gzip-1.5
+#    shch('./configure             \
+#              --prefix=/usr       \
+#              --sysconfdir=/etc')
+#    shch('make')
+#    shch('make install')
+
+## 6.49. Gzip-1.5
 #with pkg('gzip-1.5'):
-# 6.51. IPRoute2-3.8.0
-#with pkg('iPRoute2-3.8.0'):
-# 6.52. Kbd-1.15.5
+#    shch('./configure         \
+#              --prefix=/usr   \
+#              --bindir=/bin')
+#    shch('make')
+#    shch('make install')
+#    shch('mv -v /bin/{gzexe,uncompress,zcmp,zdiff,zegrep} /usr/bin')
+#    shch('mv -v /bin/{zfgrep,zforce,zgrep,zless,zmore,znew} /usr/bin')
+
+## 6.50. IPRoute2-3.8.0
+#with pkg('iproute2-3.8.0'):
+#    shch(r"sed -i '/^TARGETS/s@arpd@@g' misc/Makefile")
+#    shch(r'sed -i /ARPD/d Makefile')
+#    shch(r"sed -i 's/arpd.8//' man/man8/Makefile")
+#    shch(r"sed -i 's/-Werror//' Makefile")
+#    shch('make DESTDIR=')
+#    shch('make DESTDIR=                                  \
+#          MANDIR=/usr/share/man                          \
+#          DOCDIR=/usr/share/doc/iproute2-3.8.0 install')
+
+## 6.51. Kbd-1.15.5
 #with pkg('kbd-1.15.5'):
-# 6.53. Kmod-12
+#    shch('patch -Np1 -i ../kbd-1.15.5-backspace-1.patch')
+#    shch("sed -i -e '326 s/if/while/' src/loadkeys.analyze.l")
+#    shch("sed -i 's/\(RESIZECONS_PROGS=\)yes/\1no/g' configure")
+#    shch("sed -i 's/resizecons.8 //' man/man8/Makefile.in")
+#    shch('./configure            \
+#              --prefix=/usr      \
+#              --datadir=/lib/kbd \
+#              --disable-vlock')
+#    shch('make')
+#    shch('make install')
+
+## 6.52. Kmod-12
 #with pkg('kmod-12'):
-# 6.54. Libpipeline-1.2.2
+#    shch('./configure               \
+#              --prefix=/usr         \
+#              --bindir=/bin         \
+#              --libdir=/lib         \
+#              --sysconfdir=/etc     \
+#              --disable-manpages    \
+#              --with-xz             \
+#              --with-zlib')
+#    shch('make')
+#    shch('make check')
+#    shch('make pkgconfigdir=/usr/lib/pkgconfig install')
+#    for target in ['depmod', 'insmod', 'modinfo', 'modprobe', 'rmmod']:
+#        shch('ln -sv ../bin/kmod /sbin/{0}'.format(target))
+#    shch('ln -sv kmod /bin/lsmod')
+
+## 6.53. Libpipeline-1.2.2
 #with pkg('libpipeline-1.2.2'):
-# 6.55. Make-3.82
+#    shch('PKG_CONFIG_PATH=/tools/lib/pkgconfig \
+#          ./configure                          \
+#              --prefix=/usr')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
+
+## 6.54. Make-3.82
 #with pkg('make-3.82'):
-# 6.56. Man-DB-2.6.3
-#with pkg('man-DB-2.6.3'):
-# 6.57. Patch-2.7.1
+#    shch('patch -Np1 -i ../make-3.82-upstream_fixes-3.patch')
+#    shch('./configure --prefix=/usr')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
+
+## 6.55. Man-DB-2.6.3
+#with pkg('man-db-2.6.3'):
+#    shch('./configure                                \
+#              --prefix=/usr                          \
+#              --libexecdir=/usr/lib                  \
+#              --docdir=/usr/share/doc/man-db-2.6.3   \
+#              --sysconfdir=/etc                      \
+#              --disable-setuid                       \
+#              --with-browser=/usr/bin/lynx           \
+#              --with-vgrind=/usr/bin/vgrind          \
+#              --with-grap=/usr/bin/grap')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
+
+## 6.56. Patch-2.7.1
 #with pkg('patch-2.7.1'):
-# 6.58. Sysklogd-1.5
+#    shch('./configure --prefix=/usr')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
+
+## 6.57. Sysklogd-1.5
 #with pkg('sysklogd-1.5'):
-# 6.59. Sysvinit-2.88dsf
+#    shch('make')
+#    shch('make BINDIR=/sbin install')
+#    with open('/etc/syslog.conf', 'w') as fp:
+#        fp.write('# Begin /etc/syslog.conf\n'
+#                 '\n'
+#                 'auth,authpriv.* -/var/log/auth.log\n'
+#                 '*.*;auth,authpriv.none -/var/log/sys.log\n'
+#                 'daemon.* -/var/log/daemon.log\n'
+#                 'kern.* -/var/log/kern.log\n'
+#                 'mail.* -/var/log/mail.log\n'
+#                 'user.* -/var/log/user.log\n'
+#                 '*.emerg *\n'
+#                 '\n'
+#                 '# End /etc/syslog.conf\n')
+
+## 6.58. Sysvinit-2.88dsf
 #with pkg('sysvinit-2.88dsf'):
-# 6.60. Tar-1.26
+#    shch("sed -i 's@Sending processes@& configured via /etc/inittab@g' src/init.c")
+#    shch("sed -i -e '/utmpdump/d'                  \
+#                 -e '/mountpoint/d' src/Makefile")
+#    shch('make -C src')
+#    shch('make -C src install')
+
+## 6.59. Tar-1.26
 #with pkg('tar-1.26'):
-# 6.61. Texinfo-5.0
+#    shch("sed -i -e '/gets is a/d' gnu/stdio.in.h")
+#    shch('FORCE_UNSAFE_CONFIGURE=1     \
+#          ./configure --prefix=/usr    \
+#              --bindir=/bin            \
+#              --libexecdir=/usr/sbin')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
+#    shch('make -C doc install-html docdir=/usr/share/doc/tar-1.26')
+
+# 6.60. Texinfo-5.0
 #with pkg('texinfo-5.0'):
-# 6.62. Udev-197 (Extracted from systemd-197)
-#with pkg('udev-197 (Extracted from systemd-197)'):
-# 6.63. Vim-7.3
-#with pkg('vim-7.3'):
+#    shch('./configure --prefix=/usr')
+#    shch('make')
+#    shch('make check')
+#    shch('make install')
+#    shch('make TEXMF=/usr/share/texmf install-tex')
+
+# 6.61. Udev-197 (Extracted from systemd-197)
+#with pkg('systemd-197'):
+#    shch('tar -xvf ../udev-lfs-197-2.tar.bz2')
+#    shch('make -f udev-lfs-197-2/Makefile.lfs')
+#    shch('make -f udev-lfs-197-2/Makefile.lfs install')
+#    shch('build/udevadm hwdb --update')
+#    shch('bash udev-lfs-197-2/init-net-rules.sh')
+
+## 6.62. Vim-7.3
+#with pkg('vim73', 'vim-7.3'):
+#    shch("echo \"#define SYS_VIMRC_FILE '/etc/vimrc'\" >> src/feature.h")
+#    shch('./configure              \
+#              --prefix=/usr        \
+#              --enable-multibyte')
+#    shch('make')
+#    shch('make test')
+#    shch('make install')
+#
+#    shch('ln -sv vim /usr/bin/vi')
+#    # FIXME
+#    shch('ln -sv ../vim/vim73/doc /usr/share/doc/vim-7.3')
+#    with open('/etc/vimrc', 'w') as fp:
+#        fp.write('" Begin /etc/vimrc\n'
+#                 '\n'
+#                 'set nocompatible\n'
+#                 'set backspace=2\n'
+#                 'syntax on\n'
+#                 'if (&term == "iterm") || (&term == "putty")\n'
+#                 '  set background=dark\n'
+#                 'endif\n'
+#                 '\n'
+#                 '" End /etc/vimrc\n')
+
+
+# 6.64. Stripping Again
+# FIXME
